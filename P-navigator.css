@@ -28,7 +28,7 @@ body {
 .logo {
     height: 69px;    
     width: 100%;
-    background-image: url("Images/Y-new png campus chit.png");
+    background-image: url("Y-new png campus chit.png");
     background-size: cover;
 }
 
@@ -171,17 +171,17 @@ h1 {
 }
 
 .camp-eve-col{
-    background-image: url("Images/Q.jpg");
+    background-image: url("Q.jpg");
     background-size: cover;
 }
 
 .camp-eve-col3{
-    background-image: url("Images/R.jpg");
+    background-image: url("R.jpg");
     background-size: cover;
 }
 
 .camp-eve-col5{
-    background-image: url("Images/T.jpg");
+    background-image: url("T.jpg");
     background-size: cover;
 }
 .camp-eve-col2, .camp-eve-col4, .camp-eve-col6 {
