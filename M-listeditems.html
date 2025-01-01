@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Navigator - Lost and Found Items</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #f4f7f9;
+            --text-color: #333;
+            --card-background: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(to right, #9333ea, #db2777);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .instructions {
+            background-color: #f8f9fa;
+            border-left: 4px solid #9333ea;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin-bottom 0.3s ease-out;
+            max-height: 1000px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .instructions h2 {
+            margin-bottom: 0.5rem;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .instructions h2::after {
+            content: '▼';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .instructions.collapsed h2::after {
+            transform: rotate(-90deg);
+        }
+
+        .instructions.collapsed {
+            max-height: 3rem;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            margin: 0.5rem 0 0 1.5rem;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .instructions.collapsed ul {
+            opacity: 0;
+        }
+
+        .instructions li {
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .search-container {
+            flex: 1 1 100%;
+            position: relative;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f0f0f0;
+            font-weight: 500;
+        }
+
+        .filter-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #dateFilter {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #dc2626;
+            background: #fee2e2;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .item-card {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .item-content {
+            padding: 1.5rem;
+        }
+
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .item-status.lost {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .item-status.found {
+            background-color: #51cf66;
+            color: white;
+        }
+
+        .item-details {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .view-details-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            background-color: #3a7bd5;
+            border:none;
+            color:white;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .view-details-btn:hover {
+            background-color: #3a7bd5;
+            border:none;
+            color:white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        #modalItemImage {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(to right, #9333ea, #db2777);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .no-items {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        #requestOTPBtn{
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            background-color: #3a7bd5;
+            border:none;
+            color:white;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .campus-foot {
+    background-color: rgb(31 41 55);
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-around;
+    padding: 40px 20px;
+}
+
+        .foot-work {
+            font-size: 20px;
+            font-weight: bolder;
+            margin-bottom: 10px;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list a {
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        .img-foot {
+            height: 82px;
+            width: 186px;
+            margin-top: 10px;
+        }
+
+        #verifyOTPBtn{
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            background-color: #3a7bd5;
+            border:none;
+            color:white;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        #resendOTPBtn{
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            background-color: #3a7bd5;
+            border:none;
+            color:white;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .button-with-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 1.5rem 0;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .instructions {
+                margin-bottom: 1rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .search-container {
+                margin-bottom: 1rem;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            #dateFilter {
+                width: 100%;
+            }
+
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Campus Navigator</h1>
+        <p class="subtitle">Lost and Found Items</p>
+    </header>
+
+    <div class="container">
+        <div class="instructions collapsed">
+            <h2 onclick="toggleInstructions()">Instructions</h2>
+            <ul>
+                <li>Browse through the list of lost and found items below.</li>
+                <li>Use the search bar to find specific items.</li>
+                <li>Filter items by date or status (Lost/Found).</li>
+                <li>Click on "View Details" to get more information about an item.</li>
+                <li>If you've lost an item, check if it's been found.</li>
+                <li>If you've found an item, you can claim it if it matches your lost item.</li>
+                <li>Use your University email address for verification.</li>
+                <li>Provide accurate and detailed information when submitting or claiming items.</li>
+            </ul>
+        </div>
+
+        <div class="filters">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search items...">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <div class="filter-group">
+                <div class="filter-buttons">
+                    <button class="filter-button active" data-status="all">All</button>
+                    <button class="filter-button" data-status="lost">Lost</button>
+                    <button class="filter-button" data-status="found">Found</button>
+                </div>
+                <input type="date" id="dateFilter">
+            </div>
+        </div>
+
+        <div id="itemGrid" class="item-grid">
+            <div class="loading">Loading items...</div>
+        </div>
+    </div>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modalItemImage" src="" alt="Item Image">
+            <h2 id="modalItemName"></h2>
+            <p id="modalItemStatus"></p>
+            <p id="modalItemDescription"></p>
+            <p id="modalItemLocation"></p>
+            <p id="modalItemDate"></p>
+            <div id="modalSeenSection"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="campus-foot">
+            <ul class="list">
+                <p class="foot-work">Quick Links</p>
+                <a href="#">Academic Calendar</a>
+                <a href="#">Campus Service</a> 
+                <a href="#">Student Resources</a> 
+                <a href="#">Contact Us</a>
+            </ul>
+            
+            <ul class="list">
+                <p class="foot-work">Stay Connected With Us</p>    
+                <a href="#">Our Website</a>
+                <img class="img-foot" src="new png campus chit.png" alt="Campus Explorer Logo">
+                <p class="one">© 2024 Campus Explorer. All rights reserved.</p>
+            </ul>
+
+            <ul class="list">
+                <p class="foot-work">Follow Us On</p>
+                <a href="#">LinkedIn</a>
+                <a href="#">Twitter</a> 
+                <a href="#">Instagram</a> 
+                <a href="#">threads</a>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://campusnav.onrender.com/api';
+        const emailRegex = /^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$/;
+        let allItems = [];
+
+        function toggleInstructions() {
+            const instructions = document.querySelector('.instructions');
+            instructions.classList.toggle('collapsed');
+        }
+
+        async function fetchItems() {
+            const itemGrid = document.getElementById('itemGrid');
+            try {
+                itemGrid.innerHTML = '<div class="loading">Loading items...</div>';
+                const response = await fetch(`${API_URL}/items`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch items');
+                }
+                allItems = await response.json();
+                console.log('Fetched items:', allItems);
+                filterItems();
+            } catch (error) {
+                console.error('Error:', error);
+                itemGrid.innerHTML = `<div class="error">Error loading items: ${error.message}. Please try again later.</div>`;
+            }
+        }
+
+        function displayItems(items) {
+            const itemGrid = document.getElementById('itemGrid');
+            itemGrid.innerHTML = '';
+
+            if (items.length === 0) {
+                itemGrid.innerHTML = '<div class="no-items">No items match your search criteria</div>';
+                return;
+            }
+
+            items.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                const imageSrc = item.photo ? `https://campusnav.onrender.com${item.photo}` : 'https://campusnav.onrender.com/placeholder.svg?height=200&width=300';
+
+                itemCard.innerHTML = `
+                    <img src="${imageSrc}" alt="${item.name}" class="item-image" onerror="this.onerror=null; this.src='https://campusnav.onrender.com/placeholder.svg?height=200&width=300';">
+                    <div class="item-content">
+                        <h3 class="item-name">${item.name}</h3>
+                        <span class="item-status ${item.status}">${item.status}</span>
+                        <p class="item-details">${item.description.substring(0, 100)}${item.description.length > 100 ? '...' : ''}</p>
+                        <p class="item-date">Date: ${new Date(item.date).toLocaleDateString()}</p>
+                        <button class="view-details-btn" data-id="${item._id}">View Details</button>
+                    </div>
+                `;
+
+                itemGrid.appendChild(itemCard);
+            });
+
+            // Add event listeners after adding items to DOM
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', () => openModal(btn.dataset.id));
+            });
+        }
+
+        function filterItems() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const dateFilter = document.getElementById('dateFilter').value;
+            const activeStatus = document.querySelector('.filter-button.active').dataset.status;
+
+            const filteredItems = allItems.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
+                                      item.description.toLowerCase().includes(searchTerm);
+                const matchesDate = dateFilter ? new Date(item.date).toISOString().split('T')[0] === dateFilter : true;
+                const matchesStatus = activeStatus === 'all' || item.status === activeStatus;
+
+                return matchesSearch && matchesDate && matchesStatus;
+            });
+
+            displayItems(filteredItems);
+        }
+
+        async function openModal(itemId) {
+            const modal = document.getElementById('itemModal');
+            try {
+                const response = await fetch(`${API_URL}/items/${itemId}`);
+                if (!response.ok) throw new Error('Failed to fetch item details');
+                const item = await response.json();
+                displayItemDetails(item);
+                modal.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading item details. Please try again.');
+            }
+        }
+
+        function displayItemDetails(item) {
+            const modalItemName = document.getElementById('modalItemName');
+            const modalItemStatus = document.getElementById('modalItemStatus');
+            const modalItemDescription = document.getElementById('modalItemDescription');
+            const modalItemLocation = document.getElementById('modalItemLocation');
+            const modalItemDate = document.getElementById('modalItemDate');
+            const modalItemImage = document.getElementById('modalItemImage');
+            const modalSeenSection = document.getElementById('modalSeenSection');
+
+            modalItemName.textContent = item.name;
+            modalItemStatus.innerHTML = `<span class="item-status ${item.status}">${item.status}</span>`;
+            modalItemDescription.textContent = `Description: ${item.description}`;
+            modalItemLocation.textContent = `Location: ${item.location}`;
+            modalItemDate.textContent = `Date Reported: ${new Date(item.date).toLocaleString()}`;
+            
+            const imageSrc = item.photo ? `https://campusnav.onrender.com${item.photo}` : 'https://campusnav.onrender.com/placeholder.svg?height=200&width=300';
+            modalItemImage.src = imageSrc;
+            modalItemImage.alt = item.name;
+            modalItemImage.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://campusnav.onrender.com/placeholder.svg?height=200&width=300';
+            };
+
+            if (item.status === 'lost') {
+                modalSeenSection.innerHTML = `
+                    <div class="seen-form">
+                        <h3>Seen This Item ?</h3>
+                        <form id="seenForm" class="form-group">
+                            <div class="form-group">
+                                <label for="seenName">Your Name</label>
+                                <input type="text" id="seenName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="seenEmail">Your Chitkara Email</label>
+                                <input type="email" id="seenEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="seenPhone">Your Phone Number</label>
+                                <input type="tel" id="seenPhone" required pattern="[0-9]{10}" 
+                                    title="Please enter a 10-digit phone number">
+                            </div>
+                            <div class="form-group">
+                                <label for="seenDetails">Details</label>
+                                <textarea id="seenDetails" required 
+                                    placeholder="Provide details about where you've seen this item"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Submit Information</button>
+                        </form>
+                        <div id="seenFeedbackMessage" class="feedback-message"></div>
+                    </div>
+                `;
+                document.getElementById('seenForm').addEventListener('submit', (e) => submitSeen(e, item._id));
+            } else {
+                modalSeenSection.innerHTML = `
+                    <div class="claim-form">
+                        <h3>Claim Item</h3>
+                        <form id="claimForm" class="form-group">
+                            <div class="form-group">
+                                <label for="claimName">Your Name</label>
+                                <input type="text" id="claimName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="claimEmail">Your Chitkara Email</label>
+                                <input type="email" id="claimEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="claimDetails">Proof of Ownership</label>
+                                <textarea id="claimDetails" required 
+                                    placeholder="Provide details to prove this item belongs to you"></textarea>
+                            </div>
+                            <div id="otpSection" style="display: none;">
+                                <input type="text" id="otpInput" placeholder="Enter OTP" required>
+                                <div class="otp-buttons">
+                                    <button type="button" id="verifyOTPBtn" class="otp-button verify-otp-btn">Verify OTP</button>
+                                    <button type="button" id="resendOTPBtn" class="otp-button resend-otp-btn">Resend OTP</button>
+                                </div>
+                            </div>
+                            <button type="button" id="requestOTPBtn" class="otp-button request-otp-btn">Request OTP</button>
+                            <button type="submit" id="submitClaimBtn" class="submit-btn" style="display: none;">Submit Claim</button>
+                        </form>
+                        <div id="claimFeedbackMessage" class="feedback-message"></div>
+                    </div>
+                `;
+                setupOTPHandlers(item._id);
+            }
+        }
+
+        async function submitSeen(e, itemId) {
+            e.preventDefault();
+            const seenName = document.getElementById('seenName').value;
+            const seenEmail = document.getElementById('seenEmail').value;
+            const seenPhone = document.getElementById('seenPhone').value;
+            const seenDetails = document.getElementById('seenDetails').value;
+
+            if (!emailRegex.test(seenEmail)) {
+                showFeedback('seenFeedbackMessage', 'Please enter a valid Chitkara University email address', 'error');
+                return;
+            }
+
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            showSpinner(submitButton);
+
+            try {
+                const response = await fetch(`${API_URL}/items/${itemId}/seen`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: seenName,
+                        email: seenEmail,
+                        phone: seenPhone,
+                        details: seenDetails
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showFeedback('seenFeedbackMessage', result.notificationSent ? 
+                        'Your information has been submitted successfully! The item owner has been notified.' : 
+                        'Your information has been submitted successfully!', 'success');
+                    setTimeout(() => {
+                        document.getElementById('itemModal').style.display = 'none';
+                    }, 3000);
+                } else if (response.status === 400 && result.message.includes('maximum number')) {
+                    showFeedback('seenFeedbackMessage', 'You have reached the limit of 2 information submissions. No more submissions allowed.', 'error');
+                } else {
+                    showFeedback('seenFeedbackMessage', result.message || 'Error submitting information. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('seenFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(submitButton);
+            }
+        }
+
+        async function submitClaim(e, itemId) {
+            e.preventDefault();
+            const claimName = document.getElementById('claimName').value;
+            const claimEmail = document.getElementById('claimEmail').value;
+            const claimDetails = document.getElementById('claimDetails').value;
+
+            if (!emailRegex.test(claimEmail)) {
+                showFeedback('claimFeedbackMessage', 'Please enter a valid Chitkara University email address', 'error');
+                return;
+            }
+
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            showSpinner(submitButton);
+
+            try {
+                const response = await fetch(`${API_URL}/items/${itemId}/claim`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: claimName,
+                        email: claimEmail,
+                        details: claimDetails
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showFeedback('claimFeedbackMessage', result.notificationSent ? 
+                        'Your claim has been submitted successfully! The item finder has been notified.' : 
+                        'Your claim has been submitted successfully!', 'success');
+                    setTimeout(() => {
+                        document.getElementById('itemModal').style.display = 'none';
+                    }, 3000);
+                } else if (response.status === 400 && result.message.includes('maximum number')) {
+                    showFeedback('claimFeedbackMessage', 'You have reached the limit of 2 claims. No more claims can be submitted.', 'error');
+                } else {
+                    showFeedback('claimFeedbackMessage', result.message || 'Error submitting claim. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('claimFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(submitButton);
+            }
+        }
+
+        async function requestOTP(email) {
+            const requestOTPBtn = document.getElementById('requestOTPBtn');
+            showSpinner(requestOTPBtn);
+
+            try {
+                const response = await fetch(`${API_URL}/request-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                if (response.ok) {
+                    document.getElementById('otpSection').style.display = 'block';
+                    showFeedback('claimFeedbackMessage', 'OTP sent successfully. Please check your email.', 'success');
+                } else {
+                    showFeedback('claimFeedbackMessage', 'Error sending OTP. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('claimFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(requestOTPBtn);
+            }
+        }
+
+        async function verifyOTP(email, otp) {
+            const verifyOTPBtn = document.getElementById('verifyOTPBtn');
+            showSpinner(verifyOTPBtn);
+
+            try {
+                const response = await fetch(`${API_URL}/verify-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, otp })
+                });
+
+                if (response.ok) {
+                    showFeedback('claimFeedbackMessage', 'OTP verified successfully. You can now submit your claim.', 'success');
+                    document.getElementById('submitClaimBtn').style.display = 'block';
+                    document.getElementById('otpSection').style.display = 'none';
+                    document.getElementById('requestOTPBtn').style.display = 'none';
+                } else {
+                    showFeedback('claimFeedbackMessage', 'Invalid OTP. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('claimFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(verifyOTPBtn);
+            }
+        }
+
+        function setupOTPHandlers(itemId) {
+            const requestOTPBtn = document.getElementById('requestOTPBtn');
+            const verifyOTPBtn = document.getElementById('verifyOTPBtn');
+            const resendOTPBtn = document.getElementById('resendOTPBtn');
+            const submitClaimBtn = document.getElementById('submitClaimBtn');
+            const claimForm = document.getElementById('claimForm');
+            const claimEmailInput = document.getElementById('claimEmail');
+
+            requestOTPBtn.addEventListener('click', () => {
+                const email = claimEmailInput.value;
+                if (emailRegex.test(email)) {
+                    requestOTP(email);
+                } else {
+                    showFeedback('claimFeedbackMessage', 'Please enter a valid Chitkara University email address', 'error');
+                }
+            });
+
+            verifyOTPBtn.addEventListener('click', () => {
+                const email = claimEmailInput.value;
+                const otp = document.getElementById('otpInput').value;
+                if (otp) {
+                    verifyOTP(email, otp);
+                } else {
+                    showFeedback('claimFeedbackMessage', 'Please enter the OTP', 'error');
+                }
+            });
+
+            resendOTPBtn.addEventListener('click', () => {
+                const email = claimEmailInput.value;
+                if (emailRegex.test(email)) {
+                    requestOTP(email);
+                } else {
+                    showFeedback('claimFeedbackMessage', 'Please enter a valid Chitkara University email address', 'error');
+                }
+            });
+
+            claimForm.addEventListener('submit', (e) => submitClaim(e, itemId));
+        }
+
+        function showFeedback(elementId, message, type) {
+            const feedbackElement = document.getElementById(elementId);
+            feedbackElement.textContent = message;
+            feedbackElement.className = `feedback-message ${type}`;
+            feedbackElement.style.display = 'block';
+            setTimeout(() => {
+                feedbackElement.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSpinner(button) {
+            button.disabled = true;
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            button.classList.add('button-with-spinner');
+            button.appendChild(spinner);
+        }
+
+        function hideSpinner(button) {
+            button.disabled = false;
+            button.classList.remove('button-with-spinner');
+            const spinner = button.querySelector('.spinner');
+            if (spinner) {
+                button.removeChild(spinner);
+            }
+        }
+
+        // Add event listeners for filters and search
+        document.getElementById('searchInput').addEventListener('input', filterItems);
+        document.getElementById('dateFilter').addEventListener('change', filterItems);
+        document.querySelectorAll('.filter-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                filterItems();
+            });
+        });
+
+        // Close modal when clicking on the close button or outside the modal
+        document.querySelector('.close').addEventListener('click', () => {
+            document.getElementById('itemModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('itemModal')) {
+                document.getElementById('itemModal').style.display = 'none';
+            }
+        });
+
+        // Initial fetch of items
+        fetchItems();
+    </script>
+</body>
+</html>

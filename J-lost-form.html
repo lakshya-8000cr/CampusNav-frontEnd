@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Navigator - Report Lost or Found Item</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #f4f7f9;
+            --text-color: #333;
+            --card-background: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(to right, #9333ea, #db2777);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .form-container {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-button {
+            padding: 0.75rem 1.5rem;
+            margin: 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s, opacity 0.3s;
+            font-weight: 500;
+            width: 180px;
+            height: 50px;
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .toggle-button:active {
+            transform: translateY(0);
+        }
+
+        .toggle-button.lost {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .toggle-button.found {
+            background-color: #51cf66;
+            color: white;
+        }
+
+        .toggle-button.inactive {
+            opacity: 0.6;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(to right, #9333ea, #db2777);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #3a7bd5;
+        }
+
+        .success-message, .error-message {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .view-items-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .view-items-link:hover {
+            color: #3a7bd5;
+        }
+
+        #verifyOTPButton {
+            background: linear-gradient(to right, #9333ea, #db2777);
+            color: white;
+            padding: 0.4rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Campus Navigator</h1>
+        <p class="subtitle">Report Lost or Found Item</p>
+    </header>
+
+    <div class="container">
+        <div class="form-container">
+            <div class="button-container">
+                <button id="lostButton" class="toggle-button lost">Report Lost Item</button>
+                <button id="foundButton" class="toggle-button found">Report Found Item</button>
+            </div>
+            <form id="itemForm" enctype="multipart/form-data">
+                <label for="name">Item Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+                
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+                
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+                
+                <label for="yourName">Your Name:</label>
+                <input type="text" id="yourName" name="yourName" required>
+                
+                <label for="yourEmail">Your Email Address:</label>
+                <input type="email" id="yourEmail" name="yourEmail" required pattern="^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$" title="Please use your Chitkara University email (e.g., yourname1234.besce24@chitkara.edu.in)">
+                
+                <div id="otpSection" style="display: none;">
+                    <label for="otp">Enter OTP:</label>
+                    <input type="text" id="otp" name="otp" required>
+                    <button type="button" id="verifyOTPButton">Verify OTP</button>
+                </div>
+                
+                <button type="submit">Submit Report</button>
+            </form>
+        </div>
+        <div id="message"></div>
+        <a href="E-listeditems.html" class="view-items-link">View All Reported Items</a>
+    </div>
+
+    <script>
+        const API_URL = 'https://campusnav.onrender.com/api';
+        let currentStatus = 'lost';
+        let emailVerified = false;
+
+        const lostButton = document.getElementById('lostButton');
+        const foundButton = document.getElementById('foundButton');
+        const form = document.getElementById('itemForm');
+        const messageDiv = document.getElementById('message');
+        const emailInput = document.getElementById('yourEmail');
+        const otpSection = document.getElementById('otpSection');
+        const verifyOTPButton = document.getElementById('verifyOTPButton');
+
+        lostButton.addEventListener('click', () => setStatus('lost'));
+        foundButton.addEventListener('click', () => setStatus('found'));
+
+        function setStatus(status) {
+            currentStatus = status;
+            lostButton.classList.toggle('inactive', status !== 'lost');
+            foundButton.classList.toggle('inactive', status !== 'found');
+            form.querySelector('button[type="submit"]').style.background = 
+                status === 'lost' ? 'linear-gradient(to right, #ff6b6b, #ff8e8e)' : 'linear-gradient(to right, #51cf66, #69db7c)';
+        }
+
+        emailInput.addEventListener('blur', async () => {
+            if (emailInput.checkValidity()) {
+                try {
+                    const response = await fetch(`${API_URL}/request-otp`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: emailInput.value }),
+                    });
+
+                    if (response.ok) {
+                        showMessage('OTP sent to your email. Please check and enter below.', 'success');
+                        otpSection.style.display = 'block';
+                        emailVerified = false; // Reset verification status
+                    } else {
+                        showMessage('Error sending OTP. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showMessage('An error occurred. Please try again later.', 'error');
+                }
+            }
+        });
+
+        verifyOTPButton.addEventListener('click', async () => {
+            const otp = document.getElementById('otp').value;
+            try {
+                const response = await fetch(`${API_URL}/verify-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        email: emailInput.value, 
+                        otp: otp 
+                    }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showMessage('Email verified successfully!', 'success');
+                    emailVerified = true;
+                    otpSection.style.display = 'none';
+                } else {
+                    showMessage(data.message || 'Invalid OTP. Please try again.', 'error');
+                    emailVerified = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('An error occurred. Please try again later.', 'error');
+                emailVerified = false;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!emailVerified) {
+                showMessage('Please verify your email before submitting.', 'error');
+                return;
+            }
+
+            const formData = new FormData(form);
+            formData.append('status', currentStatus);
+
+            try {
+                const response = await fetch(`${API_URL}/items`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showMessage('Item reported successfully!', 'success');
+                    form.reset();
+                    emailVerified = false;
+                    otpSection.style.display = 'none';
+                } else {
+                    showMessage(data.message || 'Error reporting item. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('An error occurred. Please try again later.', 'error');
+            }
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
+
