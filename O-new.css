@@ -140,27 +140,27 @@ body {
   height: 190px;
 }
 .event-image1 {
-  background-image: url("Images/T.jpg");
+  background-image: url("T.jpg");
   background-size: cover;
 }
 
 .event-image2 {
-  background-image: url("Images/R.jpg");
+  background-image: url("R.jpg");
   background-size: cover;
 }
 
 .event-image3 {
-  background-image: url("Images/U.jpg");
+  background-image: url("U.jpg");
   background-size: cover;
 }
 
 .event-image4 {
-  background-image: url("Images/V.jpg");
+  background-image: url("V.jpg");
   background-size: cover;
 }
 
 .event-image5 {
-  background-image: url("Images/V.jpg");
+  background-image: url("V.jpg");
   background-size: cover;
 }
 
