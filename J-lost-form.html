@@ -216,9 +216,8 @@
 </head>
 <body>
     <header>
-        <p class="subtitle">Site is under developement some feature may not work! lost and found button will not work you can only click on submit report for lost form !</p>
         <h1>Campus Navigator</h1>
-        <p class="subtitle">Report Lost or Found Item </p>
+        <p class="subtitle">Report Lost or Found Item</p>
     </header>
 
     <div class="container">
@@ -246,6 +245,8 @@
                 <label for="yourEmail">Your Email Address:</label>
                 <input type="email" id="yourEmail" name="yourEmail" required pattern="^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$" title="Please use your Chitkara University email (e.g., yourname1234.besce24@chitkara.edu.in)">
                 
+                <input type="hidden" id="status" name="status" value="lost">
+
                 <div id="otpSection" style="display: none;">
                     <label for="otp">Enter OTP:</label>
                     <input type="text" id="otp" name="otp" required>
@@ -281,6 +282,8 @@
             foundButton.classList.toggle('inactive', status !== 'found');
             form.querySelector('button[type="submit"]').style.background = 
                 status === 'lost' ? 'linear-gradient(to right, #ff6b6b, #ff8e8e)' : 'linear-gradient(to right, #51cf66, #69db7c)';
+            document.getElementById('status').value = status;
+            console.log('Status set to:', status); // Add this line for debugging
         }
 
         emailInput.addEventListener('blur', async () => {
@@ -346,7 +349,9 @@
             }
 
             const formData = new FormData(form);
-            formData.append('status', currentStatus);
+            // Make sure status is sent as a single string value
+            const statusInput = document.getElementById('status');
+            formData.set('status', statusInput.value);
 
             try {
                 const response = await fetch(`${API_URL}/items`, {
@@ -382,4 +387,6 @@
     </script>
 </body>
 </html>
+
+
 
