@@ -12,6 +12,10 @@ body {
   flex-direction: column;
 }
 
+.rounded-full mb-2{
+  border-radius:5px;
+}
+
 .navbar {
   height: 72px;
   background-color: white;
