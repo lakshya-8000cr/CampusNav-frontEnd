@@ -640,7 +640,7 @@ body {
 }
 
 .map iframe {
-    width: 100%;
+    width: 900px;
     height: 100%;
     border: 0;
     border-radius: 6px;
