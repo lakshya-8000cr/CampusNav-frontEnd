@@ -4,110 +4,315 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Explorer</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MWQYMQPYED"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-    dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'G-MWQYMQPYED');
-    </script>
-    <link rel="stylesheet" href="P-navigator.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/GLTFLoader.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@latest"></script>
+
 </head>
 <body>
-    <header>
-        <div class="navbar">
-            <div class="nav-logo">
-                <div class="logo"></div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="public/Y-new png campus chit.png" alt="Logo" class="logo-img">
+                    <span class="logo-text">Campus Explorer</span>
+                </div>
+                
+                <nav class="nav-desktop">
+                    <a href="/map" class="nav-link">Map</a>
+                    <a href="J-lost-form.html" class="nav-link">Lost-Found forms</a>
+                    <a href="K-event.html" class="nav-link">Events</a>
+                    <a href="L-holidays.html" class="nav-link">Holidays</a>
+                    <a href="N-about.html" class="nav-link">About</a>
+                    <a href="M-listeditems.html" class="nav-link">Listed Items</a>
+                </nav>
+
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            <div class="nav-text">Campus Explorer</div>
-            <div class="nav-search-icons">
-                <button t class="btn nav-buttons"><a href="https://maps.app.goo.gl/uRRmBQWG8qHd4zAB6" target="_blank"> Map</a></button>
-                <button class="btn nav-buttons"><a class="one" href="J-lost-form.html" >Lost-Found forms</a></button>
-                <button class="btn nav-buttons"><a class="one" href="K-event.html">Events </a></button>
-                <button class="btn nav-buttons"><a class="one" href="L-holidays.html">Holidays</a></button>
-                <button class="btn nav-buttons"><a class="one" href="N-about.html" >About </a></button>
-                <button class="btn nav-buttons"><a class="one" href="M-listeditems.html">Listed Items</a></button>
-            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <nav class="nav-mobile">
+                <a href="/map" class="nav-link">Map</a>
+                <a href="/lost-found" class="nav-link">Lost-Found forms</a>
+                <a href="/events" class="nav-link">Events</a>
+                <a href="/holidays" class="nav-link">Holidays</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/listed-items" class="nav-link">Listed Items</a>
+            </nav>
         </div>
     </header>
 
-    <main class="main-container-campus">
-        
-       
-        <div class="campus-map">
-            <p>Campus Map</p>
-            <div class="map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3437.174971799996!2d76.65720287502891!3d30.5160910960714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fc32344a6e2d7%3A0x81b346dee91799ca!2sChitkara%20University!5e0!3m2!1sen!2sin!4v1731912827150!5m2!1sen!2sin" width="1500" height="432" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
-        </div>
-
-        <h1>Featured Events</h1>
-
-        <div class="campus-events">
-            <div class="events">
-                <div class="camp-eve-col">
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div id="canvas-container"></div>
+            <div class="hero-content">
+              <div id="scene">
+                <model-viewer 
+                src="public/binoculars.glb" 
+                alt="3D Model" 
+                auto-rotate 
+                camera-controls 
+                ar>
+                </model-viewer>
+              </div>
+                <h1 class="hero-title">Campus Explorer</h1>
+                <p class="hero-description">
+                    Experience your campus like never before with our revolutionary navigation platform
+                </p>
+                <div class="campus-map">
+                    
+                    <div class="map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3437.174971799996!2d76.65720287502891!3d30.5160910960714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fc32344a6e2d7%3A0x81b346dee91799ca!2sChitkara%20University!5e0!3m2!1sen!2sin!4v1731912827150!5m2!1sen!2sin" width="1100" height="432" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
                 </div>
-                <div class="camp-eve-col2"> 
-                    <h3>Ieee Ipl Auction</h3>
-                    <p><i class="fa-regular fa-clock"></i> Sept 1-7</p>
-                    <p><i class="fa-solid fa-location-dot"></i>Einstein Block</p>
-                    <button class="btn events-button">Learn More</button>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Buildings Mapped</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1000+</div>
+                        <div class="stat-label">Daily Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">Items Recovered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
                 </div>
+
+                <div class="scroll-indicator">
+                    <div class="scroll-line"></div>
+                    <span>Scroll to explore</span>
+                </div>
+
             </div>
 
-            <div class="events">
-                <div class="camp-eve-col3"></div>
-                <div class="camp-eve-col4">
-                    <h3>Open Source Clubbing</h3>
-                    <p><i class="fa-regular fa-clock"></i> Oct 15</p>
-                    <p><i class="fa-solid fa-location-dot"></i>Pythagoras</p>
-                    <button class="btn events-button">Learn More</button>
-                </div>
-            </div>
+        </section>
 
-            <div class="events">
-                <div class="camp-eve-col5"></div>
-                <div class="camp-eve-col6">
-                    <h3>The Wall Street Show</h3>
-                    <p><i class="fa-regular fa-clock"></i> Nov 19</p>
-                    <p><i class="fa-solid fa-location-dot"></i> Explorotorium</p>
-                    <button class="btn events-button">Learn More</button>
+        <!-- Benefits Section -->
+        <section class="benefits">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Why Use Lost & Found?</h2>
+                    <p class="section-description">
+                        Our lost and found system helps you quickly recover lost items and return found items to their rightful owners.
+                    </p>
+                </div>
+
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon violet">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                        </div>
+                        <h3>Quick Recovery</h3>
+                        <p>Report and find lost items within minutes using our efficient system</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon blue">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        <h3>Easy Search</h3>
+                        <p>Advanced search features help you locate items with precise filters</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon cyan">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h3>Location Tracking</h3>
+                        <p>Track where items were lost or found with our interactive map</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon teal">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M20 6L9 17l-5-5"></path>
+                            </svg>
+                        </div>
+                        <h3>Verified Returns</h3>
+                        <p>Secure verification process ensures items return to rightful owners</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Featured Events Section -->
+        <section class="events">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Featured Events</h2>
+                </div>
+
+                <div class="events-grid">
+                    <div class="event-card">
+                        <div class="event-image">
+                            <img src="Q.jpg" alt="IEEE IPL Auction">
+                        </div>
+                        <div class="event-content">
+                            <h3>IEEE IPL Auction</h3>
+                            <div class="event-details">
+                                <div class="event-date">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Sept 1-7
+                                </div>
+                                <div class="event-location">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Einstein Block
+                                </div>
+                            </div>
+                            <button class="event-button">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-image">
+                            <img src="R.jpg" alt="Open Source Clubbing">
+                        </div>
+                        <div class="event-content">
+                            <h3>Open Source Clubbing</h3>
+                            <div class="event-details">
+                                <div class="event-date">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Oct 15
+                                </div>
+                                <div class="event-location">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Pythagoras
+                                </div>
+                            </div>
+                            <button class="event-button">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-image">
+                            <img src="S.jpg" alt="The Wall Street Show">
+                        </div>
+                        <div class="event-content">
+                            <h3>The Wall Street Show</h3>
+                            <div class="event-details">
+                                <div class="event-date">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Nov 19
+                                </div>
+                                <div class="event-location">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Explorotornium
+                                </div>
+                            </div>
+                            <button class="event-button">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="events-footer">
+                    <a href="K-event.html" class="view-all-button">View All Events</a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer>
-        <div class="campus-foot">
-            <ul class="list">
-                <p class="foot-work">Quick Links</p>
-                <a href="#">Academic Calendar</a>
-                <a href="#">Campus Service</a> 
-                <a href="#">St
-                    udent Resources</a> 
-                <a href="#">Contact Us</a>
-            </ul>
-            
-            <ul class="list">
-                <p class="foot-work">Stay Connected With Us</p>    
-                <a href="#">Our Website</a>g
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>About Campus Explorer</h3>
+                    <p>Your comprehensive guide to campus navigation, lost & found services, and event tracking.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                    </div>
+                </div>
 
-                <img class="img-foot" src="Y-new png campus chit.png" alt="Campus Explorer Logo">
-                <p class="one">© 2024 Campus Explorer. All rights reserved.</p>
-            </ul>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/map">Campus Map</a></li>
+                        <li><a href="/lost-found">Lost & Found</a></li>
+                        <li><a href="/events">Events Calendar</a></li>
+                        <li><a href="/holidays">Holiday Schedule</a></li>
+                    </ul>
+                </div>
 
-            <ul class="list">
-                <p class="foot-work">Follow Us On</p>
-                <a href="#">LinkedIn</a>
-                <a href="#">Twitter</a> 
-                <a href="#">Instagram</a> 
-                <a href="#">threads</a>
-            </ul>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="contact-info">
+                        <li>📧 support@campusexplorer.com</li>
+                        <li>📞 +91 7508060340</li>
+                        <li>📍 University Campus, Main Building</li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Stay Updated</h3>
+                    <p>Subscribe to our newsletter for updates and announcements.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Campus Explorer. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
