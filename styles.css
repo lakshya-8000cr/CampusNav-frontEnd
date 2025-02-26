@@ -648,15 +648,17 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .map {
+    .campus-map {
         height: 300px;
         margin: 20px auto;
+        width: 370px;
     }
 }
 
 @media (max-width: 480px) {
     .map {
-        height: 250px;
+        height: 260px;
         margin: 15px auto;
+        width: 350px;
     }
 }
