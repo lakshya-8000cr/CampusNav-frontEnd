@@ -640,10 +640,10 @@
             items.forEach(item => {
                 const itemCard = document.createElement('div');
                 itemCard.className = 'item-card';
-                const imageSrc = item.photo ? `https://campusnav.onrender.com${item.photo}` : 'https://campusnav.onrender.com/placeholder.svg?height=200&width=300';
+                const imageSrc = item.photo ? `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME` : 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
 
                 itemCard.innerHTML = `
-                    <img src="${imageSrc}" alt="${item.name}" class="item-image" onerror="this.onerror=null; this.src='https://campusnav.onrender.com/placeholder.svg?height=200&width=300';">
+                    <img src="${imageSrc}" alt="${item.name}" class="item-image" onerror="this.onerror=null; this.src='https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';">
                     <div class="item-content">
                         <h3 class="item-name">${item.name}</h3>
                         <span class="item-status ${item.status}">${item.status}</span>
@@ -708,12 +708,12 @@
             modalItemLocation.textContent = `Location: ${item.location}`;
             modalItemDate.textContent = `Date Reported: ${new Date(item.date).toLocaleString()}`;
             
-            const imageSrc = item.photo ? `https://campusnav.onrender.com${item.photo}` : 'https://campusnav.onrender.com/placeholder.svg?height=200&width=300';
+            const imageSrc = item.photo ? `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME` : 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
             modalItemImage.src = imageSrc;
             modalItemImage.alt = item.name;
             modalItemImage.onerror = function() {
                 this.onerror = null;
-                this.src = 'https://campusnav.onrender.com/placeholder.svg?height=200&width=300';
+                this.src = 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
             };
 
             if (item.status === 'lost') {
