@@ -564,7 +564,7 @@
     <div id="itemModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <img id="modalItemImage" src="" alt="Item Image">
+            <img id="modalItemImage" src="/placeholder.svg" alt="Item Image">
             <h2 id="modalItemName"></h2>
             <p id="modalItemStatus"></p>
             <p id="modalItemDescription"></p>
@@ -640,7 +640,7 @@
             items.forEach(item => {
                 const itemCard = document.createElement('div');
                 itemCard.className = 'item-card';
-                const imageSrc = item.photo ? `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME` : 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
+                const imageSrc = item.photo || '/placeholder.svg?height=400&width=400';
 
                 itemCard.innerHTML = `
                     <img src="${imageSrc}" alt="${item.name}" class="item-image" onerror="this.onerror=null; this.src='https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';">
@@ -708,13 +708,9 @@
             modalItemLocation.textContent = `Location: ${item.location}`;
             modalItemDate.textContent = `Date Reported: ${new Date(item.date).toLocaleString()}`;
             
-            const imageSrc = item.photo ? `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME` : 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
+            const imageSrc = item.photo || '/placeholder.svg?height=400&width=400';
             modalItemImage.src = imageSrc;
             modalItemImage.alt = item.name;
-            modalItemImage.onerror = function() {
-                this.onerror = null;
-                this.src = 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
-            };
 
             if (item.status === 'lost') {
                 modalSeenSection.innerHTML = `
@@ -1029,4 +1025,5 @@
     </script>
 </body>
 </html>
+
 
