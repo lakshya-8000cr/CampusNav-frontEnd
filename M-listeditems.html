@@ -602,119 +602,126 @@
     </footer>
 
     <script>
-        const API_URL = 'https://campusnav.onrender.com/api';
-        const emailRegex = /^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$/;
-        let allItems = [];
+const API_URL = 'https://campusnav.onrender.com/api';
+const emailRegex = /^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$/;
+let allItems = [];
 
-        function toggleInstructions() {
-            const instructions = document.querySelector('.instructions');
-            instructions.classList.toggle('collapsed');
+function toggleInstructions() {
+    const instructions = document.querySelector('.instructions');
+    instructions.classList.toggle('collapsed');
+}
+
+async function fetchItems() {
+    const itemGrid = document.getElementById('itemGrid');
+    try {
+        itemGrid.innerHTML = '<div class="loading">Loading items...</div>';
+        const response = await fetch(`${API_URL}/items`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch items');
         }
+        allItems = await response.json();
+        console.log('Fetched items:', allItems);
+        filterItems();
+    } catch (error) {
+        console.error('Error:', error);
+        itemGrid.innerHTML = `<div class="error">Error loading items: ${error.message}. Please try again later.</div>`;
+    }
+}
 
-        async function fetchItems() {
-            const itemGrid = document.getElementById('itemGrid');
-            try {
-                itemGrid.innerHTML = '<div class="loading">Loading items...</div>';
-                const response = await fetch(`${API_URL}/items`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch items');
-                }
-                allItems = await response.json();
-                console.log('Fetched items:', allItems);
-                filterItems();
-            } catch (error) {
-                console.error('Error:', error);
-                itemGrid.innerHTML = `<div class="error">Error loading items: ${error.message}. Please try again later.</div>`;
-            }
-        }
+function displayItems(items) {
+    const itemGrid = document.getElementById('itemGrid');
+    itemGrid.innerHTML = '';
 
-        function displayItems(items) {
-            const itemGrid = document.getElementById('itemGrid');
-            itemGrid.innerHTML = '';
+    if (items.length === 0) {
+        itemGrid.innerHTML = '<div class="no-items">No items match your search criteria</div>';
+        return;
+    }
 
-            if (items.length === 0) {
-                itemGrid.innerHTML = '<div class="no-items">No items match your search criteria</div>';
-                return;
-            }
+    items.forEach(item => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'item-card';
 
-            items.forEach(item => {
-                const itemCard = document.createElement('div');
-                itemCard.className = 'item-card';
-                const imageSrc = item.photo ? `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME` : 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
+        // ✅ FIXED: Use item.photo directly instead of a hardcoded Cloudinary URL
+        const imageSrc = item.photo ? item.photo : 'fallback-image.jpg';
 
-                itemCard.innerHTML = `
-                    <img src="${imageSrc}" alt="${item.name}" class="item-image" onerror="this.onerror=null; this.src='https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';">
-                    <div class="item-content">
-                        <h3 class="item-name">${item.name}</h3>
-                        <span class="item-status ${item.status}">${item.status}</span>
-                        <p class="item-details">${item.description.substring(0, 100)}${item.description.length > 100 ? '...' : ''}</p>
-                        <p class="item-date">Date: ${new Date(item.date).toLocaleDateString()}</p>
-                        <button class="view-details-btn" data-id="${item._id}">View Details</button>
-                    </div>
-                `;
+        itemCard.innerHTML = `
+            <img src="${imageSrc}" alt="${item.name}" class="item-image" 
+                 onerror="this.onerror=null; this.src='fallback-image.jpg';">
+            <div class="item-content">
+                <h3 class="item-name">${item.name}</h3>
+                <span class="item-status ${item.status}">${item.status}</span>
+                <p class="item-details">${item.description.substring(0, 100)}${item.description.length > 100 ? '...' : ''}</p>
+                <p class="item-date">Date: ${new Date(item.date).toLocaleDateString()}</p>
+                <button class="view-details-btn" data-id="${item._id}">View Details</button>
+            </div>
+        `;
 
-                itemGrid.appendChild(itemCard);
-            });
+        itemGrid.appendChild(itemCard);
+    });
 
-            // Add event listeners after adding items to DOM
-            document.querySelectorAll('.view-details-btn').forEach(btn => {
-                btn.addEventListener('click', () => openModal(btn.dataset.id));
-            });
-        }
+    // Add event listeners after adding items to DOM
+    document.querySelectorAll('.view-details-btn').forEach(btn => {
+        btn.addEventListener('click', () => openModal(btn.dataset.id));
+    });
+}
 
-        function filterItems() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const dateFilter = document.getElementById('dateFilter').value;
-            const activeStatus = document.querySelector('.filter-button.active').dataset.status;
+function filterItems() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const dateFilter = document.getElementById('dateFilter').value;
+    const activeStatus = document.querySelector('.filter-button.active').dataset.status;
 
-            const filteredItems = allItems.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
-                                      item.description.toLowerCase().includes(searchTerm);
-                const matchesDate = dateFilter ? new Date(item.date).toISOString().split('T')[0] === dateFilter : true;
-                const matchesStatus = activeStatus === 'all' || item.status === activeStatus;
+    const filteredItems = allItems.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
+                              item.description.toLowerCase().includes(searchTerm);
+        const matchesDate = dateFilter ? new Date(item.date).toISOString().split('T')[0] === dateFilter : true;
+        const matchesStatus = activeStatus === 'all' || item.status === activeStatus;
 
-                return matchesSearch && matchesDate && matchesStatus;
-            });
+        return matchesSearch && matchesDate && matchesStatus;
+    });
 
-            displayItems(filteredItems);
-        }
+    displayItems(filteredItems);
+}
 
-        async function openModal(itemId) {
-            const modal = document.getElementById('itemModal');
-            try {
-                const response = await fetch(`${API_URL}/items/${itemId}`);
-                if (!response.ok) throw new Error('Failed to fetch item details');
-                const item = await response.json();
-                displayItemDetails(item);
-                modal.style.display = 'block';
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error loading item details. Please try again.');
-            }
-        }
+async function openModal(itemId) {
+    const modal = document.getElementById('itemModal');
+    try {
+        const response = await fetch(`${API_URL}/items/${itemId}`);
+        if (!response.ok) throw new Error('Failed to fetch item details');
+        const item = await response.json();
+        displayItemDetails(item);
+        modal.style.display = 'block';
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error loading item details. Please try again.');
+    }
+}
 
-        function displayItemDetails(item) {
-            const modalItemName = document.getElementById('modalItemName');
-            const modalItemStatus = document.getElementById('modalItemStatus');
-            const modalItemDescription = document.getElementById('modalItemDescription');
-            const modalItemLocation = document.getElementById('modalItemLocation');
-            const modalItemDate = document.getElementById('modalItemDate');
-            const modalItemImage = document.getElementById('modalItemImage');
-            const modalSeenSection = document.getElementById('modalSeenSection');
+function displayItemDetails(item) {
+    const modalItemName = document.getElementById('modalItemName');
+    const modalItemStatus = document.getElementById('modalItemStatus');
+    const modalItemDescription = document.getElementById('modalItemDescription');
+    const modalItemLocation = document.getElementById('modalItemLocation');
+    const modalItemDate = document.getElementById('modalItemDate');
+    const modalItemImage = document.getElementById('modalItemImage');
 
-            modalItemName.textContent = item.name;
-            modalItemStatus.innerHTML = `<span class="item-status ${item.status}">${item.status}</span>`;
-            modalItemDescription.textContent = `Description: ${item.description}`;
-            modalItemLocation.textContent = `Location: ${item.location}`;
-            modalItemDate.textContent = `Date Reported: ${new Date(item.date).toLocaleString()}`;
-            
-            const imageSrc = item.photo ? `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME` : 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
-            modalItemImage.src = imageSrc;
-            modalItemImage.alt = item.name;
-            modalItemImage.onerror = function() {
-                this.onerror = null;
-                this.src = 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';
-            };
+    modalItemName.textContent = item.name;
+    modalItemStatus.innerHTML = `<span class="item-status ${item.status}">${item.status}</span>`;
+    modalItemDescription.textContent = `Description: ${item.description}`;
+    modalItemLocation.textContent = `Location: ${item.location}`;
+    modalItemDate.textContent = `Date Reported: ${new Date(item.date).toLocaleString()}`;
+
+    // ✅ FIXED: Use item.photo directly
+    const imageSrc = item.photo ? item.photo : 'fallback-image.jpg';
+    modalItemImage.src = imageSrc;
+    modalItemImage.alt = item.name;
+    
+    // Ensure fallback image loads in case of an error
+    modalItemImage.onerror = function() {
+        this.onerror = null;
+        this.src = 'fallback-image.jpg';
+    };
+}
+
 
             if (item.status === 'lost') {
                 modalSeenSection.innerHTML = `
