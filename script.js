@@ -36,7 +36,7 @@ function initLoader() {
     // Simulate loading progress
     let progress = 0;
     const interval = setInterval(() => {
-        progress += Math.random() * 10;
+        progress += Math.random() * 2;
         if (progress > 100) progress = 100;
         
         loaderBar.style.width = `${progress}%`;
