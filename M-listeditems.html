@@ -22,6 +22,7 @@
             --text-color: #333;
             --card-background: #ffffff;
             --shadow-color: rgba(0, 0, 0, 0.1);
+            --success-color: #51cf66;
         }
 
         * {
@@ -236,6 +237,8 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
         }
 
         .item-status {
@@ -257,6 +260,24 @@
             color: white;
         }
 
+        .item-status.resolved {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .resolved-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
         .item-details {
             margin-top: 1rem;
             font-size: 0.9rem;
@@ -270,15 +291,34 @@
             text-decoration: none;
             transition: background-color 0.3s ease;
             background-color: #3a7bd5;
-            border:none;
-            color:white;
+            border: none;
+            color: white;
             box-shadow: 0 4px 6px var(--shadow-color);
+            border-radius: 4px;
+            cursor: pointer;
         }
 
         .view-details-btn:hover {
-            background-color: #3a7bd5;
-            border:none;
-            color:white;
+            background-color: #2c5ea3;
+        }
+
+        .resolve-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            margin-left: 0.5rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .resolve-btn:hover {
+            background-color: #45a049;
         }
 
         .modal {
@@ -377,26 +417,28 @@
             color: #666;
         }
 
-        #requestOTPBtn{
+        #requestOTPBtn, #verifyOTPBtn, #resendOTPBtn {
             display: inline-block;
             margin-top: 1rem;
             padding: 0.5rem 1rem;
             text-decoration: none;
             transition: background-color 0.3s ease;
             background-color: #3a7bd5;
-            border:none;
-            color:white;
+            border: none;
+            color: white;
             box-shadow: 0 4px 6px var(--shadow-color);
+            border-radius: 4px;
+            cursor: pointer;
         }
 
         .campus-foot {
-    background-color: rgb(31 41 55);
-    color: white;
-    font-size: 20px;
-    display: flex;
-    justify-content: space-around;
-    padding: 40px 20px;
-}
+            background-color: rgb(31 41 55);
+            color: white;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-around;
+            padding: 40px 20px;
+        }
 
         .foot-work {
             font-size: 20px;
@@ -421,30 +463,6 @@
             margin-top: 10px;
         }
 
-        #verifyOTPBtn{
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            background-color: #3a7bd5;
-            border:none;
-            color:white;
-            box-shadow: 0 4px 6px var(--shadow-color);
-        }
-
-        #resendOTPBtn{
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            background-color: #3a7bd5;
-            border:none;
-            color:white;
-            box-shadow: 0 4px 6px var(--shadow-color);
-        }
-
         .spinner {
             width: 20px;
             height: 20px;
@@ -465,6 +483,51 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        /* Resolve Modal Styles */
+        #resolveModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .resolve-modal-content {
+            background-color: var(--card-background);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .feedback-message {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .feedback-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .feedback-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #otpSection {
+            margin-top: 1rem;
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -529,10 +592,11 @@
             <ul>
                 <li>Browse through the list of lost and found items below.</li>
                 <li>Use the search bar to find specific items.</li>
-                <li>Filter items by date or status (Lost/Found).</li>
+                <li>Filter items by date or status (Lost/Found/Resolved).</li>
                 <li>Click on "View Details" to get more information about an item.</li>
                 <li>If you've lost an item, check if it's been found.</li>
                 <li>If you've found an item, you can claim it if it matches your lost item.</li>
+                <li>If you've found your lost item, click "Resolve" to mark it as resolved.</li>
                 <li>Use your University email address for verification.</li>
                 <li>Provide accurate and detailed information when submitting or claiming items.</li>
             </ul>
@@ -551,6 +615,7 @@
                     <button class="filter-button active" data-status="all">All</button>
                     <button class="filter-button" data-status="lost">Lost</button>
                     <button class="filter-button" data-status="found">Found</button>
+                    <button class="filter-button" data-status="resolved">Resolved</button>
                 </div>
                 <input type="date" id="dateFilter">
             </div>
@@ -561,6 +626,7 @@
         </div>
     </div>
 
+    <!-- Item Details Modal -->
     <div id="itemModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -571,6 +637,47 @@
             <p id="modalItemLocation"></p>
             <p id="modalItemDate"></p>
             <div id="modalSeenSection"></div>
+        </div>
+    </div>
+
+    <!-- Resolve Item Modal -->
+    <div id="resolveModal" class="modal">
+        <div class="resolve-modal-content">
+            <span class="close" onclick="closeResolveModal()">&times;</span>
+            <h2>Resolve Item</h2>
+            <p id="resolveItemName" style="margin-bottom: 1rem;"></p>
+            
+            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
+                <p style="font-weight: 500; margin-bottom: 0.5rem;">To mark this item as resolved:</p>
+                <ol style="margin-left: 1.5rem;">
+                    <li>Enter the email you used when reporting this item</li>
+                    <li>Verify your email with OTP</li>
+                    <li>Click "Mark as Resolved" to confirm you've found your item</li>
+                </ol>
+            </div>
+            
+            <form id="resolveForm">
+                <div class="form-group">
+                    <label for="resolveEmail">Your Email (used to report this item):</label>
+                    <input type="email" id="resolveEmail" required pattern="^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$" title="Please use your Chitkara University email">
+                </div>
+                
+                <div id="otpSection">
+                    <div class="form-group">
+                        <label for="otp">Enter OTP:</label>
+                        <input type="text" id="otp" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" id="verifyOTPBtn">Verify OTP</button>
+                        <button type="button" id="resendOTPBtn">Resend OTP</button>
+                    </div>
+                </div>
+                
+                <button type="button" id="requestOTPBtn">Request OTP</button>
+                <button type="submit" id="resolveItemBtn" style="display: none;" class="submit-btn">Mark as Resolved</button>
+            </form>
+            
+            <div id="resolveFeedbackMessage" class="feedback-message"></div>
         </div>
     </div>
 
@@ -605,6 +712,7 @@
         const API_URL = 'https://campusnav.onrender.com/api';
         const emailRegex = /^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$/;
         let allItems = [];
+        let currentItemId = null;
 
         function toggleInstructions() {
             const instructions = document.querySelector('.instructions');
@@ -641,15 +749,22 @@
                 const itemCard = document.createElement('div');
                 itemCard.className = 'item-card';
                 const imageSrc = item.photo || '/placeholder.svg?height=400&width=400';
+                
+                // Create resolved icon if item is resolved
+                const resolvedIcon = item.status === 'resolved' ? 
+                    '<span class="resolved-icon">✓</span>' : '';
 
                 itemCard.innerHTML = `
-                    <img src="${imageSrc}" alt="${item.name}" class="item-image" onerror="this.onerror=null; this.src='https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/TRANSFORMATIONS/IMAGE_NAME';">
+                    <img src="${imageSrc}" alt="${item.name}" class="item-image">
                     <div class="item-content">
-                        <h3 class="item-name">${item.name}</h3>
+                        <h3 class="item-name">${resolvedIcon}${item.name}</h3>
                         <span class="item-status ${item.status}">${item.status}</span>
                         <p class="item-details">${item.description.substring(0, 100)}${item.description.length > 100 ? '...' : ''}</p>
                         <p class="item-date">Date: ${new Date(item.date).toLocaleDateString()}</p>
-                        <button class="view-details-btn" data-id="${item._id}">View Details</button>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <button class="view-details-btn" data-id="${item._id}">View Details</button>
+                            ${item.status !== 'resolved' ? `<button class="resolve-btn" data-id="${item._id}" data-name="${item.name}">Resolve</button>` : ''}
+                        </div>
                     </div>
                 `;
 
@@ -659,6 +774,10 @@
             // Add event listeners after adding items to DOM
             document.querySelectorAll('.view-details-btn').forEach(btn => {
                 btn.addEventListener('click', () => openModal(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.resolve-btn').forEach(btn => {
+                btn.addEventListener('click', () => openResolveModal(btn.dataset.id, btn.dataset.name));
             });
         }
 
@@ -702,7 +821,11 @@
             const modalItemImage = document.getElementById('modalItemImage');
             const modalSeenSection = document.getElementById('modalSeenSection');
 
-            modalItemName.textContent = item.name;
+            // Add resolved icon if item is resolved
+            const resolvedIcon = item.status === 'resolved' ? 
+                '<span class="resolved-icon" style="margin-right: 8px;">✓</span>' : '';
+            
+            modalItemName.innerHTML = `${resolvedIcon}${item.name}`;
             modalItemStatus.innerHTML = `<span class="item-status ${item.status}">${item.status}</span>`;
             modalItemDescription.textContent = `Description: ${item.description}`;
             modalItemLocation.textContent = `Location: ${item.location}`;
@@ -712,7 +835,7 @@
             modalItemImage.src = imageSrc;
             modalItemImage.alt = item.name;
 
-            if (item.status === 'lost') {
+            if (item.status === 'lost' && item.status !== 'resolved') {
                 modalSeenSection.innerHTML = `
                     <div class="seen-form">
                         <h3>Seen This Item ?</h3>
@@ -741,7 +864,7 @@
                     </div>
                 `;
                 document.getElementById('seenForm').addEventListener('submit', (e) => submitSeen(e, item._id));
-            } else {
+            } else if (item.status === 'found' && item.status !== 'resolved') {
                 modalSeenSection.innerHTML = `
                     <div class="claim-form">
                         <h3>Claim Item</h3>
@@ -773,6 +896,124 @@
                     </div>
                 `;
                 setupOTPHandlers(item._id);
+            } else if (item.status === 'resolved') {
+                modalSeenSection.innerHTML = `
+                    <div style="background-color: #d4edda; padding: 1rem; border-radius: 5px; margin-top: 1rem;">
+                        <p style="color: #155724; font-weight: 500;">This item has been resolved by the owner.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function openResolveModal(itemId, itemName) {
+            currentItemId = itemId;
+            document.getElementById('resolveItemName').textContent = `Item: ${itemName}`;
+            document.getElementById('resolveModal').style.display = 'block';
+            document.getElementById('resolveEmail').value = '';
+            document.getElementById('otp').value = '';
+            document.getElementById('otpSection').style.display = 'none';
+            document.getElementById('requestOTPBtn').style.display = 'block';
+            document.getElementById('resolveItemBtn').style.display = 'none';
+            document.getElementById('resolveFeedbackMessage').style.display = 'none';
+        }
+
+        function closeResolveModal() {
+            document.getElementById('resolveModal').style.display = 'none';
+        }
+
+        async function requestOTP(email) {
+            const requestOTPBtn = document.getElementById('requestOTPBtn');
+            showSpinner(requestOTPBtn);
+
+            try {
+                const response = await fetch(`${API_URL}/request-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                if (response.ok) {
+                    document.getElementById('otpSection').style.display = 'block';
+                    showFeedback('resolveFeedbackMessage', 'OTP sent successfully. Please check your email.', 'success');
+                } else {
+                    showFeedback('resolveFeedbackMessage', 'Error sending OTP. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('resolveFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(requestOTPBtn);
+            }
+        }
+
+        async function verifyOTP(email, otp) {
+            const verifyOTPBtn = document.getElementById('verifyOTPBtn');
+            showSpinner(verifyOTPBtn);
+
+            try {
+                const response = await fetch(`${API_URL}/verify-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, otp })
+                });
+
+                if (response.ok) {
+                    showFeedback('resolveFeedbackMessage', 'Email verified successfully. You can now mark this item as resolved.', 'success');
+                    document.getElementById('resolveItemBtn').style.display = 'block';
+                    document.getElementById('otpSection').style.display = 'none';
+                    document.getElementById('requestOTPBtn').style.display = 'none';
+                } else {
+                    showFeedback('resolveFeedbackMessage', 'Invalid OTP. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('resolveFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(verifyOTPBtn);
+            }
+        }
+
+        async function resolveItem(email) {
+            const resolveItemBtn = document.getElementById('resolveItemBtn');
+            showSpinner(resolveItemBtn);
+
+            try {
+                const response = await fetch(`${API_URL}/items/${currentItemId}/resolve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showFeedback('resolveFeedbackMessage', 'Item marked as resolved successfully!', 'success');
+                    
+                    // Update the item in the allItems array
+                    const itemIndex = allItems.findIndex(item => item._id === currentItemId);
+                    if (itemIndex !== -1) {
+                        allItems[itemIndex].status = 'resolved';
+                    }
+                    
+                    // Refresh the display
+                    setTimeout(() => {
+                        closeResolveModal();
+                        filterItems();
+                    }, 2000);
+                } else {
+                    showFeedback('resolveFeedbackMessage', result.message || 'Error resolving item. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback('resolveFeedbackMessage', 'An error occurred. Please try again later.', 'error');
+            } finally {
+                hideSpinner(resolveItemBtn);
             }
         }
 
@@ -876,62 +1117,6 @@
             }
         }
 
-        async function requestOTP(email) {
-            const requestOTPBtn = document.getElementById('requestOTPBtn');
-            showSpinner(requestOTPBtn);
-
-            try {
-                const response = await fetch(`${API_URL}/request-otp`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email })
-                });
-
-                if (response.ok) {
-                    document.getElementById('otpSection').style.display = 'block';
-                    showFeedback('claimFeedbackMessage', 'OTP sent successfully. Please check your email.', 'success');
-                } else {
-                    showFeedback('claimFeedbackMessage', 'Error sending OTP. Please try again.', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showFeedback('claimFeedbackMessage', 'An error occurred. Please try again later.', 'error');
-            } finally {
-                hideSpinner(requestOTPBtn);
-            }
-        }
-
-        async function verifyOTP(email, otp) {
-            const verifyOTPBtn = document.getElementById('verifyOTPBtn');
-            showSpinner(verifyOTPBtn);
-
-            try {
-                const response = await fetch(`${API_URL}/verify-otp`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, otp })
-                });
-
-                if (response.ok) {
-                    showFeedback('claimFeedbackMessage', 'OTP verified successfully. You can now submit your claim.', 'success');
-                    document.getElementById('submitClaimBtn').style.display = 'block';
-                    document.getElementById('otpSection').style.display = 'none';
-                    document.getElementById('requestOTPBtn').style.display = 'none';
-                } else {
-                    showFeedback('claimFeedbackMessage', 'Invalid OTP. Please try again.', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showFeedback('claimFeedbackMessage', 'An error occurred. Please try again later.', 'error');
-            } finally {
-                hideSpinner(verifyOTPBtn);
-            }
-        }
-
         function setupOTPHandlers(itemId) {
             const requestOTPBtn = document.getElementById('requestOTPBtn');
             const verifyOTPBtn = document.getElementById('verifyOTPBtn');
@@ -998,6 +1183,50 @@
             }
         }
 
+        // Set up resolve form event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const requestOTPBtn = document.getElementById('requestOTPBtn');
+            const verifyOTPBtn = document.getElementById('verifyOTPBtn');
+            const resendOTPBtn = document.getElementById('resendOTPBtn');
+            const resolveItemBtn = document.getElementById('resolveItemBtn');
+            const resolveForm = document.getElementById('resolveForm');
+            const resolveEmailInput = document.getElementById('resolveEmail');
+
+            requestOTPBtn.addEventListener('click', () => {
+                const email = resolveEmailInput.value;
+                if (emailRegex.test(email)) {
+                    requestOTP(email);
+                } else {
+                    showFeedback('resolveFeedbackMessage', 'Please enter a valid Chitkara University email address', 'error');
+                }
+            });
+
+            verifyOTPBtn.addEventListener('click', () => {
+                const email = resolveEmailInput.value;
+                const otp = document.getElementById('otp').value;
+                if (otp) {
+                    verifyOTP(email, otp);
+                } else {
+                    showFeedback('resolveFeedbackMessage', 'Please enter the OTP', 'error');
+                }
+            });
+
+            resendOTPBtn.addEventListener('click', () => {
+                const email = resolveEmailInput.value;
+                if (emailRegex.test(email)) {
+                    requestOTP(email);
+                } else {
+                    showFeedback('resolveFeedbackMessage', 'Please enter a valid Chitkara University email address', 'error');
+                }
+            });
+
+            resolveForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = resolveEmailInput.value;
+                resolveItem(email);
+            });
+        });
+
         // Add event listeners for filters and search
         document.getElementById('searchInput').addEventListener('input', filterItems);
         document.getElementById('dateFilter').addEventListener('change', filterItems);
@@ -1018,6 +1247,9 @@
             if (e.target === document.getElementById('itemModal')) {
                 document.getElementById('itemModal').style.display = 'none';
             }
+            if (e.target === document.getElementById('resolveModal')) {
+                document.getElementById('resolveModal').style.display = 'none';
+            }
         });
 
         // Initial fetch of items
@@ -1025,5 +1257,3 @@
     </script>
 </body>
 </html>
-
-
