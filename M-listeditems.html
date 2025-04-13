@@ -1,28 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Navigator - Lost and Found Items</title>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MWQYMQPYED"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-    dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'G-MWQYMQPYED');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-MWQYMQPYED');
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f39c12;
-            --background-color: #f4f7f9;
-            --text-color: #333;
-            --card-background: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --success-color: #51cf66;
+            --color-primary: #8b5cf6; /* Purple */
+            --color-primary-light: #a78bfa;
+            --color-primary-dark: #7c3aed;
+            --color-secondary: #10b981; /* Emerald */
+            --color-secondary-light: #34d399;
+            --color-secondary-dark: #059669;
+            --color-accent: #f97316; /* Orange */
+            --color-accent-light: #fb923c;
+            --color-accent-dark: #ea580c;
+            --color-background: #f8fafc; /* Light slate */
+            --color-background-alt: #f1f5f9;
+            --color-text: #1e293b; /* Dark slate */
+            --color-text-light: #64748b;
+            --color-text-lighter: #94a3b8;
+            --color-border: #e2e8f0;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            --color-info: #3b82f6;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --font-display: 'Space Grotesk', var(--font-sans);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --radius-sm: 0.125rem;
+            --radius: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+            --transition: 0.3s ease;
+            --transition-fast: 0.15s ease;
+            --transition-slow: 0.5s ease;
+            --easing: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -32,9 +63,9 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            font-family: var(--font-sans);
+            background-color: var(--color-background);
+            color: var(--color-text);
             line-height: 1.6;
         }
 
@@ -45,31 +76,32 @@
         }
 
         header {
-            background: linear-gradient(to right,#42dbc9,#6081e6);
+            background: linear-gradient(to right, var(--color-primary-light), var(--color-primary-dark));
             color: white;
             text-align: center;
             padding: 2rem 0;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            box-shadow: var(--shadow-md);
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            font-family: var(--font-display);
         }
 
         .subtitle {
             font-size: 1.2rem;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .instructions {
-            background-color: #f8f9fa;
-            border-left: 4px solid #9333ea;
+            background-color: var(--color-background-alt);
+            border-left: 4px solid var(--color-primary);
             padding: 1rem;
             margin-bottom: 2rem;
-            border-radius: 0 4px 4px 0;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            box-shadow: var(--shadow-sm);
             transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin-bottom 0.3s ease-out;
             max-height: 1000px;
             opacity: 1;
@@ -78,7 +110,7 @@
 
         .instructions h2 {
             margin-bottom: 0.5rem;
-            color: #333;
+            color: var(--color-text);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -89,6 +121,7 @@
             content: '▼';
             font-size: 0.8em;
             transition: transform 0.3s ease;
+            color: var(--color-primary);
         }
 
         .instructions.collapsed h2::after {
@@ -113,7 +146,7 @@
         .instructions li {
             margin-bottom: 0.25rem;
             font-size: 0.9rem;
-            color: #666;
+            color: var(--color-text-light);
         }
 
         .filters {
@@ -123,8 +156,8 @@
             margin-bottom: 2rem;
             background: white;
             padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
         }
 
         .search-container {
@@ -136,14 +169,16 @@
             width: 100%;
             padding: 0.75rem 1rem 0.75rem 3rem;
             font-size: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 30px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
             transition: box-shadow 0.3s ease;
+            background-color: var(--color-background-alt);
         }
 
         #searchInput:focus {
             outline: none;
-            box-shadow: 0 0 0 2px var(--primary-color);
+            box-shadow: 0 0 0 2px var(--color-primary);
+            border-color: var(--color-primary);
         }
 
         .search-icon {
@@ -151,7 +186,7 @@
             left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: #888;
+            color: var(--color-text-lighter);
         }
 
         .filter-group {
@@ -169,38 +204,40 @@
         .filter-button {
             padding: 0.5rem 1rem;
             border: none;
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             cursor: pointer;
             transition: all 0.3s ease;
-            background-color: #f0f0f0;
+            background-color: var(--color-background-alt);
             font-weight: 500;
+            color: var(--color-text);
         }
 
         .filter-button.active {
-            background-color: var(--primary-color);
+            background-color: var(--color-primary);
             color: white;
         }
 
         #dateFilter {
             padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 20px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
             font-size: 1rem;
+            background-color: var(--color-background-alt);
         }
 
         .loading {
             text-align: center;
             padding: 2rem;
             font-size: 1.2rem;
-            color: #666;
+            color: var(--color-text-light);
         }
 
         .error {
             text-align: center;
             padding: 2rem;
-            color: #dc2626;
-            background: #fee2e2;
-            border-radius: 8px;
+            color: var(--color-error);
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: var(--radius-md);
             margin: 1rem 0;
         }
 
@@ -211,16 +248,16 @@
         }
 
         .item-card {
-            background-color: var(--card-background);
-            border-radius: 10px;
+            background-color: white;
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .item-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px var(--shadow-color);
+            box-shadow: var(--shadow-lg);
         }
 
         .item-image {
@@ -244,24 +281,24 @@
         .item-status {
             display: inline-block;
             padding: 0.25rem 0.5rem;
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-size: 0.8rem;
             font-weight: 500;
             text-transform: uppercase;
         }
 
         .item-status.lost {
-            background-color: #ff6b6b;
+            background-color: var(--color-error);
             color: white;
         }
 
         .item-status.found {
-            background-color: #51cf66;
+            background-color: var(--color-success);
             color: white;
         }
 
         .item-status.resolved {
-            background-color: #4caf50;
+            background-color: var(--color-success);
             color: white;
         }
 
@@ -271,7 +308,7 @@
             justify-content: center;
             width: 20px;
             height: 20px;
-            background-color: #4caf50;
+            background-color: var(--color-success);
             border-radius: 50%;
             color: white;
             font-size: 12px;
@@ -281,7 +318,7 @@
         .item-details {
             margin-top: 1rem;
             font-size: 0.9rem;
-            color: #666;
+            color: var(--color-text-light);
         }
 
         .view-details-btn {
@@ -290,16 +327,17 @@
             padding: 0.5rem 1rem;
             text-decoration: none;
             transition: background-color 0.3s ease;
-            background-color: #3a7bd5;
+            background-color: var(--color-primary);
             border: none;
             color: white;
-            box-shadow: 0 4px 6px var(--shadow-color);
-            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--radius-md);
             cursor: pointer;
+            font-weight: 500;
         }
 
         .view-details-btn:hover {
-            background-color: #2c5ea3;
+            background-color: var(--color-primary-dark);
         }
 
         .resolve-btn {
@@ -308,17 +346,18 @@
             margin-left: 0.5rem;
             padding: 0.5rem 1rem;
             text-decoration: none;
-            background-color: #4caf50;
+            background-color: var(--color-success);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--radius-md);
             cursor: pointer;
             transition: background-color 0.3s ease;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            box-shadow: var(--shadow-sm);
+            font-weight: 500;
         }
 
         .resolve-btn:hover {
-            background-color: #45a049;
+            background-color: var(--color-secondary-dark);
         }
 
         .modal {
@@ -334,34 +373,36 @@
         }
 
         .modal-content {
-            background-color: var(--card-background);
+            background-color: white;
             margin: 10% auto;
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             max-width: 500px;
             width: 90%;
             position: relative;
+            box-shadow: var(--shadow-xl);
         }
 
         .close {
             position: absolute;
             right: 1rem;
             top: 1rem;
-            color: #aaa;
+            color: var(--color-text-lighter);
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            transition: color 0.2s ease;
         }
 
         .close:hover {
-            color: #000;
+            color: var(--color-text);
         }
 
         #modalItemImage {
             width: 100%;
             max-height: 300px;
             object-fit: cover;
-            border-radius: 5px;
+            border-radius: var(--radius-md);
             margin-bottom: 1rem;
         }
 
@@ -379,9 +420,10 @@
         .form-group textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
             font-size: 1rem;
+            background-color: var(--color-background-alt);
         }
 
         .form-group textarea {
@@ -392,13 +434,14 @@
         .submit-btn {
             width: 100%;
             padding: 0.75rem;
-            background: linear-gradient(to right, #9333ea, #6081e6);
+            background: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--radius-md);
             font-size: 1rem;
             cursor: pointer;
             transition: opacity 0.3s ease;
+            font-weight: 500;
         }
 
         .submit-btn:hover {
@@ -414,25 +457,28 @@
             text-align: center;
             padding: 2rem;
             font-size: 1.2rem;
-            color: #666;
+            color: var(--color-text-light);
         }
 
-        #requestOTPBtn, #verifyOTPBtn, #resendOTPBtn {
+        #requestOTPBtn,
+        #verifyOTPBtn,
+        #resendOTPBtn {
             display: inline-block;
             margin-top: 1rem;
             padding: 0.5rem 1rem;
             text-decoration: none;
             transition: background-color 0.3s ease;
-            background-color: #3a7bd5;
+            background-color: var(--color-primary);
             border: none;
             color: white;
-            box-shadow: 0 4px 6px var(--shadow-color);
-            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--radius-md);
             cursor: pointer;
+            font-weight: 500;
         }
 
         .campus-foot {
-            background-color: rgb(31 41 55);
+            background-color: var(--color-text);
             color: white;
             font-size: 20px;
             display: flex;
@@ -476,7 +522,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .button-with-spinner {
@@ -499,30 +547,33 @@
         }
 
         .resolve-modal-content {
-            background-color: var(--card-background);
+            background-color: white;
             margin: 10% auto;
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             max-width: 500px;
             width: 90%;
             position: relative;
+            box-shadow: var(--shadow-xl);
         }
 
         .feedback-message {
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: var(--radius-md);
             margin-top: 1rem;
             display: none;
         }
 
         .feedback-message.success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
         }
 
         .feedback-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
         }
 
         #otpSection {
@@ -578,8 +629,164 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-text);
+            color: white;
+            padding: 5rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 640px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section p {
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 3rem;
+            height: 2px;
+            background-color: var(--color-primary);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--color-primary-light);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .contact-info a {
+            transition: color var(--transition-fast);
+        }
+
+        .contact-info a:hover {
+            color: var(--color-primary-light);
+        }
+
+        .app-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .app-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color var(--transition-fast);
+        }
+
+        .app-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+        }
+
+        .footer-bottom p {
+            opacity: 0.5;
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-links a {
+            opacity: 0.5;
+            font-size: 0.875rem;
+            transition: opacity var(--transition-fast);
+        }
+
+        .footer-bottom-links a:hover {
+            opacity: 1;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Campus Navigator</h1>
@@ -605,7 +812,8 @@
         <div class="filters">
             <div class="search-container">
                 <input type="text" id="searchInput" placeholder="Search items...">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
@@ -646,7 +854,7 @@
             <span class="close" onclick="closeResolveModal()">&times;</span>
             <h2>Resolve Item</h2>
             <p id="resolveItemName" style="margin-bottom: 1rem;"></p>
-            
+
             <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
                 <p style="font-weight: 500; margin-bottom: 0.5rem;">To mark this item as resolved:</p>
                 <ol style="margin-left: 1.5rem;">
@@ -655,13 +863,15 @@
                     <li>Click "Mark as Resolved" to confirm you've found your item</li>
                 </ol>
             </div>
-            
+
             <form id="resolveForm">
                 <div class="form-group">
                     <label for="resolveEmail">Your Email (used to report this item):</label>
-                    <input type="email" id="resolveEmail" required pattern="^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$" title="Please use your Chitkara University email">
+                    <input type="email" id="resolveEmail" required
+                        pattern="^[a-zA-Z0-9]+[0-9]{4}\.(?:be|btech|mtech|phd)[a-zA-Z]{2,4}[0-9]{2}@chitkara\.edu\.in$"
+                        title="Please use your Chitkara University email">
                 </div>
-                
+
                 <div id="otpSection">
                     <div class="form-group">
                         <label for="otp">Enter OTP:</label>
@@ -672,39 +882,155 @@
                         <button type="button" id="resendOTPBtn">Resend OTP</button>
                     </div>
                 </div>
-                
+
                 <button type="button" id="requestOTPBtn">Request OTP</button>
-                <button type="submit" id="resolveItemBtn" style="display: none;" class="submit-btn">Mark as Resolved</button>
+                <button type="submit" id="resolveItemBtn" style="display: none;" class="submit-btn">Mark as
+                    Resolved</button>
             </form>
-            
+
             <div id="resolveFeedbackMessage" class="feedback-message"></div>
         </div>
     </div>
 
-    <footer>
-        <div class="campus-foot">
-            <ul class="list">
-                <p class="foot-work">Quick Links</p>
-                <a href="#">Academic Calendar</a>
-                <a href="#">Campus Service</a> 
-                <a href="#">Student Resources</a> 
-                <a href="#">Contact Us</a>
-            </ul>
-            
-            <ul class="list">
-                <p class="foot-work">Stay Connected With Us</p>    
-                <a href="#">Our Website</a>
-                <img class="img-foot" src="Y-new png campus chit.png" alt="Campus Explorer Logo">
-                <p class="one">© 2024 Campus Explorer. All rights reserved.</p>
-            </ul>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+                            <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" />
+                            <path d="M30 40L50 30L70 40V60L50 70L30 60V40Z" stroke="currentColor" stroke-width="2" />
+                            <path d="M50 30V50M50 50V70M50 50L30 40M50 50L70 40" stroke="currentColor"
+                                stroke-width="2" />
+                        </svg>
+                        <span>Campus Explorer</span>
+                    </div>
+                    <p>Your comprehensive guide to campus navigation, lost & found services, and event tracking.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                                </path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                </path>
+                                <rect x="2" y="9" width="4" height="12"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
 
-            <ul class="list">
-                <p class="foot-work">Follow Us On</p>
-                <a href="#">LinkedIn</a>
-                <a href="#">Twitter</a> 
-                <a href="#">Instagram</a> 
-                <a href="#">threads</a>
-            </ul>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#map">Campus Map</a></li>
+                        <li><a href="#lost-found">Lost & Found</a></li>
+                        <li><a href="#events">Events Calendar</a></li>
+                        <li><a href="#holidays">Holiday Schedule</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#listed-items">Listed Items</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="contact-info">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <a
+                                href="/cdn-cgi/l/email-protection#e98a86879d888a9da98a8884999c9a8c919985869b8c9bc78c8d9c"><span
+                                    class="__cf_email__"
+                                    data-cfemail="15767a7b6174766155767478656066706d65797a6770673b707160">[email&#160;protected]</span></a>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                            <a href="tel:+917508060340">+91 7508060340</a>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            University Campus, Main Building
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Download Our App</h3>
+                    <p>Get the Campus Explorer app for easy access on the go</p>
+                    <div class="app-buttons">
+                        <a href="#" class="app-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M3 6l5 5.794L3 18" />
+                                <path d="M3 6h18" />
+                                <path d="M21 18H8" />
+                            </svg>
+                            App Store
+                        </a>
+                        <a href="#" class="app-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Google Play
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Campus Explorer. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -749,9 +1075,9 @@
                 const itemCard = document.createElement('div');
                 itemCard.className = 'item-card';
                 const imageSrc = item.photo || '/placeholder.svg?height=400&width=400';
-                
+
                 // Create resolved icon if item is resolved
-                const resolvedIcon = item.status === 'resolved' ? 
+                const resolvedIcon = item.status === 'resolved' ?
                     '<span class="resolved-icon">✓</span>' : '';
 
                 itemCard.innerHTML = `
@@ -775,7 +1101,7 @@
             document.querySelectorAll('.view-details-btn').forEach(btn => {
                 btn.addEventListener('click', () => openModal(btn.dataset.id));
             });
-            
+
             document.querySelectorAll('.resolve-btn').forEach(btn => {
                 btn.addEventListener('click', () => openResolveModal(btn.dataset.id, btn.dataset.name));
             });
@@ -787,8 +1113,8 @@
             const activeStatus = document.querySelector('.filter-button.active').dataset.status;
 
             const filteredItems = allItems.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
-                                      item.description.toLowerCase().includes(searchTerm);
+                const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
+                    item.description.toLowerCase().includes(searchTerm);
                 const matchesDate = dateFilter ? new Date(item.date).toISOString().split('T')[0] === dateFilter : true;
                 const matchesStatus = activeStatus === 'all' || item.status === activeStatus;
 
@@ -822,15 +1148,15 @@
             const modalSeenSection = document.getElementById('modalSeenSection');
 
             // Add resolved icon if item is resolved
-            const resolvedIcon = item.status === 'resolved' ? 
+            const resolvedIcon = item.status === 'resolved' ?
                 '<span class="resolved-icon" style="margin-right: 8px;">✓</span>' : '';
-            
+
             modalItemName.innerHTML = `${resolvedIcon}${item.name}`;
             modalItemStatus.innerHTML = `<span class="item-status ${item.status}">${item.status}</span>`;
             modalItemDescription.textContent = `Description: ${item.description}`;
             modalItemLocation.textContent = `Location: ${item.location}`;
             modalItemDate.textContent = `Date Reported: ${new Date(item.date).toLocaleString()}`;
-            
+
             const imageSrc = item.photo || '/placeholder.svg?height=400&width=400';
             modalItemImage.src = imageSrc;
             modalItemImage.alt = item.name;
@@ -994,13 +1320,13 @@
 
                 if (response.ok) {
                     showFeedback('resolveFeedbackMessage', 'Item marked as resolved successfully!', 'success');
-                    
+
                     // Update the item in the allItems array
                     const itemIndex = allItems.findIndex(item => item._id === currentItemId);
                     if (itemIndex !== -1) {
                         allItems[itemIndex].status = 'resolved';
                     }
-                    
+
                     // Refresh the display
                     setTimeout(() => {
                         closeResolveModal();
@@ -1049,8 +1375,8 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    showFeedback('seenFeedbackMessage', result.notificationSent ? 
-                        'Your information has been submitted successfully! The item owner has been notified.' : 
+                    showFeedback('seenFeedbackMessage', result.notificationSent ?
+                        'Your information has been submitted successfully! The item owner has been notified.' :
                         'Your information has been submitted successfully!', 'success');
                     setTimeout(() => {
                         document.getElementById('itemModal').style.display = 'none';
@@ -1098,8 +1424,8 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    showFeedback('claimFeedbackMessage', result.notificationSent ? 
-                        'Your claim has been submitted successfully! The item finder has been notified.' : 
+                    showFeedback('claimFeedbackMessage', result.notificationSent ?
+                        'Your claim has been submitted successfully! The item finder has been notified.' :
                         'Your claim has been submitted successfully!', 'success');
                     setTimeout(() => {
                         document.getElementById('itemModal').style.display = 'none';
@@ -1256,4 +1582,5 @@
         fetchItems();
     </script>
 </body>
+
 </html>
